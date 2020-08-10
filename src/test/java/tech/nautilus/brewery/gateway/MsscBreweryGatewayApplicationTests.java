@@ -1,4 +1,4 @@
-package com.sfg.gateway;
+package tech.nautilus.brewery.gateway;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

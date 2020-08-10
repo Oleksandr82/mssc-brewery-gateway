@@ -1,4 +1,4 @@
-package com.sfg.gateway;
+package tech.nautilus.brewery.gateway;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
