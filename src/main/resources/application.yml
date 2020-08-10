@@ -1,0 +1,28 @@
+logging:
+  level:
+    org.springframework.cloud.gateway: debug
+    org.springframework.http.server.reactive: debug
+    org.springframework.web.reactive: debug
+    org.springframework.boot.autoconfigure.web: debug
+    reactor.netty: debug
+server:
+  port: 9090
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+spring:
+  application:
+    name: sfg-brewery-gateway
+  cloud:
+    gateway:
+      httpserver:
+        wiretap: true
+      httpclient:
+        wiretap: true
+      routes:
+      - id: beer-service
+        uri: http://localhost:8080
+        predicates:
+        - Path=/api/v1/beer,/api/v1/beer/*,/api/v1/beerUpc/*
