@@ -26,3 +26,7 @@ spring:
         uri: http://localhost:8080
         predicates:
         - Path=/api/v1/beer,/api/v1/beer/*,/api/v1/beerUpc/*
+      - id: beer-order-service
+        uri: http://localhost:8081
+        predicates:
+        - Path=/api/v1/customers,/api/v1/customers/*/orders
