@@ -12,6 +12,10 @@ management:
     web:
       exposure:
         include: "*"
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: true
 spring:
   application:
     name: sfg-brewery-gateway
@@ -23,14 +27,17 @@ spring:
         wiretap: true
       routes:
       - id: beer-service
-        uri: http://localhost:8080
+#        uri: http://localhost:8080
+        uri: lb://beer-service
         predicates:
         - Path=/api/v1/beer,/api/v1/beer/*,/api/v1/beerUpc/*
-      - id: beer-order-service
-        uri: http://localhost:8081
+      - id: order-service
+#        uri: http://localhost:8081
+        uri: lb://order-service
         predicates:
         - Path=/api/v1/customers,/api/v1/customers/*/orders,/api/v1/customers/*/orders/*
-      - id: beer-inventory-service
-        uri: http://localhost:8082
+      - id: inventory-service
+#        uri: http://localhost:8082
+        uri: lb://inventory-service
         predicates:
           - Path=/api/v1/beer/*/inventory
