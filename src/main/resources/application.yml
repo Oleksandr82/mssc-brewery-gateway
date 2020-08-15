@@ -5,39 +5,62 @@ logging:
     org.springframework.web.reactive: debug
     org.springframework.boot.autoconfigure.web: debug
     reactor.netty: debug
+
 server:
   port: 9090
+
 management:
   endpoints:
     web:
       exposure:
         include: "*"
+
 eureka:
   client:
     register-with-eureka: false
     fetch-registry: true
+
 spring:
   application:
     name: sfg-brewery-gateway
+
   cloud:
+
+    # Debug routes
     gateway:
       httpserver:
         wiretap: true
       httpclient:
         wiretap: true
+
       routes:
+
       - id: beer-service
-#        uri: http://localhost:8080
+        # uri: http://localhost:8080
         uri: lb://beer-service
         predicates:
         - Path=/api/v1/beer,/api/v1/beer/*,/api/v1/beerUpc/*
+
       - id: order-service
-#        uri: http://localhost:8081
+        # uri: http://localhost:8081
         uri: lb://order-service
         predicates:
         - Path=/api/v1/customers,/api/v1/customers/*/orders,/api/v1/customers/*/orders/*
+
       - id: inventory-service
-#        uri: http://localhost:8082
+        # uri: http://localhost:8082
         uri: lb://inventory-service
         predicates:
-          - Path=/api/v1/beer/*/inventory
+        - Path=/api/v1/beer/*/inventory
+        filters:
+        - name: CircuitBreaker
+          args:
+            name: inventoryServiceCircuitBreaker
+            fallbackUri: forward:/inventory-failover
+#        - RewritePath=/api/v1/(?<segment>.*),/api/v1/failover/$\{segment}
+
+      - id: inventory-failover-service
+        # uri: http://localhost:8083
+        uri: lb://inventory-failover-service
+        predicates:
+        - Path=/inventory-failover
